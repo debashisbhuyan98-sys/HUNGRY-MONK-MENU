@@ -7,18 +7,24 @@
 <meta name="description" content="Hungry Monk Restro Cafe digital menu">
 <title>Hungry Monk – Digital Menu</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#faf7f2;color:#222;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{background:#171717;color:white;text-align:center;padding:30px 16px 24px;position:relative}
-header h1{margin:0;font-size:31px;letter-spacing:.4px}header p{margin:7px 0 0;color:#ddd}
+*{box-sizing:border-box}
+body{margin:0;background:#faf7f2;color:#222;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:#171717;color:white;text-align:center;padding:30px 16px 24px}
+header h1{margin:0;font-size:31px;letter-spacing:.4px}
+header p{margin:7px 0 0;color:#ddd}
 .container{max-width:760px;margin:auto;padding:14px}
 .search{position:sticky;top:0;z-index:10;background:#faf7f2;padding:10px 0}
 input{width:100%;padding:14px 16px;border:1px solid #ddd;border-radius:14px;font-size:16px;outline:none}
-.category{margin:24px 0}.category h2{font-size:21px;margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid #222}
+.category{margin:24px 0}
+.category h2{font-size:21px;margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid #222}
 .item{background:#fff;border-radius:14px;padding:14px 15px;margin:9px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-.item h3{font-size:16px;margin:0;font-weight:650}.price{font-weight:750;white-space:nowrap}.pending{color:#999;font-size:13px;font-weight:600}
+.item h3{font-size:16px;margin:0;font-weight:650}
+.price{font-weight:750;white-space:nowrap}
+.pending{color:#999;font-size:13px;font-weight:600}
 .actions{position:sticky;bottom:12px;display:flex;gap:10px;margin:24px 0 10px}
 .btn{flex:1;padding:14px;border-radius:14px;text-decoration:none;text-align:center;font-weight:750;box-shadow:0 3px 12px rgba(0,0,0,.12)}
-.whatsapp{background:#25D366;color:white}.call{background:#171717;color:white}
+.whatsapp{background:#25D366;color:white}
+.call{background:#171717;color:white}
 .note{font-size:13px;color:#777;line-height:1.5;background:#fff;padding:13px;border-radius:12px}
 footer{text-align:center;color:#777;padding:20px 10px 35px;font-size:13px}
 .hidden{display:none}
@@ -29,314 +35,254 @@ footer{text-align:center;color:#777;padding:20px 10px 35px;font-size:13px}
 <h1>HUNGRY MONK</h1>
 <p>RESTRO CAFE • Digital Menu</p>
 </header>
+
 <div class="container">
-<div class="search"><input id="search" type="search" placeholder="🔎 Search dishes..." oninput="filterMenu()"></div>
-<div id="menu"><section class="category"><h2>Vegetarian Starters</h2><div class="item" data-name="french fries">
-          <div><h3>French Fries</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="peri peri fries">
-          <div><h3>Peri Peri Fries</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="honey chilli potatoes">
-          <div><h3>Honey Chilli Potatoes</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="cheesy fries">
-          <div><h3>Cheesy Fries</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="american corn salt &amp; pepper">
-          <div><h3>American Corn Salt &amp; Pepper</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="crispy chilli babycorn">
-          <div><h3>Crispy Chilli Babycorn</h3></div><span class="price">₹241</span>
-        </div><div class="item" data-name="honey chilli babycorn">
-          <div><h3>Honey Chilli Babycorn</h3></div><span class="price">₹262</span>
-        </div><div class="item" data-name="mushroom salt &amp; pepper">
-          <div><h3>Mushroom Salt &amp; Pepper</h3></div><span class="price">₹262</span>
-        </div><div class="item" data-name="chilli mushroom dry">
-          <div><h3>Chilli Mushroom Dry</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="chilli paneer dry">
-          <div><h3>Chilli Paneer Dry</h3></div><span class="price">₹283</span>
-        </div></section>
-<section class="category"><h2>Non-Vegetarian Starters</h2><div class="item" data-name="chicken dry fry">
-          <div><h3>Chicken Dry Fry</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="dragon fierry chicken">
-          <div><h3>Dragon Fierry Chicken</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="chicken 65">
-          <div><h3>Chicken 65</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="crispy konjee chicken">
-          <div><h3>Crispy Konjee Chicken</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="crispy honey chicken">
-          <div><h3>Crispy Honey Chicken</h3></div><span class="price">₹283</span>
-        </div><div class="item" data-name="chicken lollypop (6 pcs)">
-          <div><h3>Chicken Lollypop (6 Pcs)</h3></div><span class="price">₹314</span>
-        </div><div class="item" data-name="chicken dry fry (thai style)">
-          <div><h3>Chicken Dry Fry (Thai Style)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="butter garlic chicken (dry)">
-          <div><h3>Butter Garlic Chicken (Dry)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="drum of heaven (4pcs/6pcs)">
-          <div><h3>Drum of Heaven (4pcs/6pcs)</h3></div><span class="price">₹242/283</span>
-        </div><div class="item" data-name="bbq wings (4pcs/6pcs)">
-          <div><h3>BBQ Wings (4pcs/6pcs)</h3></div><span class="price">₹242/283</span>
-        </div><div class="item" data-name="dragon fierry fish">
-          <div><h3>Dragon Fierry Fish</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="fish finger">
-          <div><h3>Fish Finger</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="thai fried fish">
-          <div><h3>Thai Fried Fish</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="dragon fierry prawns">
-          <div><h3>Dragon Fierry Prawns</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="golden fried prawns">
-          <div><h3>Golden Fried Prawns</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="butter garlic fish / prawns (dry)">
-          <div><h3>Butter Garlic Fish / Prawns (Dry)</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Beverages</h2><div class="item" data-name="cold drink (300 ml)">
-          <div><h3>Cold Drink (300 ml)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="masala cold drink">
-          <div><h3>Masala Cold Drink</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="fresh lime soda">
-          <div><h3>Fresh Lime Soda</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="virgin mojito">
-          <div><h3>Virgin Mojito</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="blue lagoon">
-          <div><h3>Blue Lagoon</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="mango mule">
-          <div><h3>Mango Mule</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Tea &amp; Coffee</h2><div class="item" data-name="monk tea (serves 2)">
-          <div><h3>Monk Tea (Serves 2)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="lemon green tea (serves 2)">
-          <div><h3>Lemon Green Tea (Serves 2)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="rose petal green tea (serves 2)">
-          <div><h3>Rose Petal Green Tea (Serves 2)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="black coffee">
-          <div><h3>Black Coffee</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="caffe latte">
-          <div><h3>Caffe Latte</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="cold coffee">
-          <div><h3>Cold Coffee</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Veg Momos</h2><div class="item" data-name="veg steam momo">
-          <div><h3>Veg Steam Momo</h3></div><span class="price">₹115</span>
-        </div><div class="item" data-name="veg fried momo">
-          <div><h3>Veg Fried Momo</h3></div><span class="price">₹115</span>
-        </div><div class="item" data-name="veg cheese steam momo">
-          <div><h3>Veg Cheese Steam Momo</h3></div><span class="price">₹136</span>
-        </div><div class="item" data-name="honey spiced veg pan-fried momo">
-          <div><h3>Honey Spiced Veg Pan-Fried Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="spicy schezwan veg pan-fried momo">
-          <div><h3>Spicy Schezwan Veg Pan-Fried Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="butter masala veg momo">
-          <div><h3>Butter Masala Veg Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="veg tandoori momo">
-          <div><h3>Veg Tandoori Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori malai veg momo">
-          <div><h3>Tandoori Malai Veg Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="cheesy mornai veg momo">
-          <div><h3>Cheesy Mornai Veg Momo</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Chicken Momos</h2><div class="item" data-name="chicken steam momo">
-          <div><h3>Chicken Steam Momo</h3></div><span class="price">₹115</span>
-        </div><div class="item" data-name="chicken fried momo">
-          <div><h3>Chicken Fried Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="honey spiced chicken pan-fried momo">
-          <div><h3>Honey Spiced Chicken Pan-Fried Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="spicy schezwan chicken pan-fried momo">
-          <div><h3>Spicy Schezwan Chicken Pan-Fried Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="butter masala chicken momo">
-          <div><h3>Butter Masala Chicken Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="chicken tandoori momo">
-          <div><h3>Chicken Tandoori Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="chicken tandoori malai momo">
-          <div><h3>Chicken Tandoori Malai Momo</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="cheesy mornai chicken momo">
-          <div><h3>Cheesy Mornai Chicken Momo</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Soups</h2><div class="item" data-name="sweet corn soup">
-          <div><h3>Sweet Corn Soup</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="hot &#x27;n&#x27; sour soup">
-          <div><h3>Hot &#x27;N&#x27; Sour Soup</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="manchow soup">
-          <div><h3>Manchow Soup</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="lemon &#x27;n&#x27; corriander soup">
-          <div><h3>Lemon &#x27;N&#x27; Corriander Soup</h3></div><span class="price">₹136</span>
-        </div><div class="item" data-name="creamy mushroom soup">
-          <div><h3>Creamy Mushroom Soup</h3></div><span class="price">₹146</span>
-        </div></section>
-<section class="category"><h2>Oriental Main Course – Rice &amp; Noodles</h2><div class="item" data-name="veg fried rice">
-          <div><h3>Veg Fried Rice</h3></div><span class="price">₹146</span>
-        </div><div class="item" data-name="veg schezwan fried rice">
-          <div><h3>Veg Schezwan Fried Rice</h3></div><span class="price">₹157</span>
-        </div><div class="item" data-name="veg hakka noodles">
-          <div><h3>Veg Hakka Noodles</h3></div><span class="price">₹146</span>
-        </div><div class="item" data-name="veg hot garlic noodles">
-          <div><h3>Veg Hot Garlic Noodles</h3></div><span class="price">₹157</span>
-        </div><div class="item" data-name="mixed chinese chop suey">
-          <div><h3>Mixed Chinese Chop Suey</h3></div><span class="price">₹230</span>
-        </div><div class="item" data-name="mixed american chop suey">
-          <div><h3>Mixed American Chop Suey</h3></div><span class="price">₹230</span>
-        </div></section>
-<section class="category"><h2>Oriental Main Course – Vegetarian</h2><div class="item" data-name="veg manchurian">
-          <div><h3>Veg Manchurian</h3></div><span class="price">₹199</span>
-        </div><div class="item" data-name="mixed vegetables in hot garlic sauce">
-          <div><h3>Mixed Vegetables in Hot Garlic Sauce</h3></div><span class="price">₹262</span>
-        </div><div class="item" data-name="chilli paneer">
-          <div><h3>Chilli Paneer</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Oriental Main Course – Non-Vegetarian</h2><div class="item" data-name="chilli chicken">
-          <div><h3>Chilli Chicken</h3></div><span class="price">₹272</span>
-        </div><div class="item" data-name="chilli fish">
-          <div><h3>Chilli Fish</h3></div><span class="price">₹293</span>
-        </div><div class="item" data-name="chilli fish (sweet, sour &amp; spicy)">
-          <div><h3>Chilli Fish (sweet, sour &amp; spicy)</h3></div><span class="price">₹293</span>
-        </div><div class="item" data-name="chilli prawn">
-          <div><h3>Chilli Prawn</h3></div><span class="price">₹314</span>
-        </div></section>
-<section class="category"><h2>Combo Platters – Vegetarian</h2><div class="item" data-name="veg moburg">
-          <div><h3>Veg Moburg</h3></div><span class="price">₹167</span>
-        </div><div class="item" data-name="oriental veg delite">
-          <div><h3>Oriental Veg Delite</h3></div><span class="price">₹209</span>
-        </div><div class="item" data-name="oriental paneer delite">
-          <div><h3>Oriental Paneer Delite</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="indian paneer delite">
-          <div><h3>Indian Paneer Delite</h3></div><span class="price">₹241</span>
-        </div></section>
-<section class="category"><h2>Combo Platters – Non-Vegetarian</h2><div class="item" data-name="chicken moburg">
-          <div><h3>Chicken Moburg</h3></div><span class="price">₹199</span>
-        </div><div class="item" data-name="oriental chicken delite">
-          <div><h3>Oriental Chicken Delite</h3></div><span class="price">₹230</span>
-        </div><div class="item" data-name="indian chicken delite">
-          <div><h3>Indian Chicken Delite</h3></div><span class="price">₹251</span>
-        </div><div class="item" data-name="tandoor-se-combo delite">
-          <div><h3>Tandoor-Se-Combo Delite</h3></div><span class="price">₹472</span>
-        </div></section>
-<section class="category"><h2>North Indian – Vegetarian</h2><div class="item" data-name="dal makhani">
-          <div><h3>Dal Makhani</h3></div><span class="price">₹188</span>
-        </div><div class="item" data-name="mix veg">
-          <div><h3>Mix Veg</h3></div><span class="price">₹230</span>
-        </div><div class="item" data-name="mushroom masala">
-          <div><h3>Mushroom Masala</h3></div><span class="price">₹262</span>
-        </div><div class="item" data-name="matar paneer">
-          <div><h3>Matar Paneer</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="paneer do pyaja (4 pcs/6 pcs)">
-          <div><h3>Paneer Do Pyaja (4 Pcs/6 Pcs)</h3></div><span class="price">₹220/293</span>
-        </div><div class="item" data-name="kadhai paneer (4 pcs/6 pcs)">
-          <div><h3>Kadhai Paneer (4 Pcs/6 Pcs)</h3></div><span class="price">₹220/293</span>
-        </div><div class="item" data-name="paneer lababdar (4 pcs/6 pcs)">
-          <div><h3>Paneer Lababdar (4 Pcs/6 Pcs)</h3></div><span class="price">₹220/293</span>
-        </div><div class="item" data-name="paneer butter masala (4 pcs)">
-          <div><h3>Paneer Butter Masala (4 Pcs)</h3></div><span class="price">₹209</span>
-        </div><div class="item" data-name="paneer butter masala (6 pcs)">
-          <div><h3>Paneer Butter Masala (6 Pcs)</h3></div><span class="price">₹293</span>
-        </div><div class="item" data-name="shahi paneer (4 pcs/6 pcs)">
-          <div><h3>Shahi Paneer (4 Pcs/6 Pcs)</h3></div><span class="price">₹264/346</span>
-        </div></section>
-<section class="category"><h2>North Indian – Non-Vegetarian</h2><div class="item" data-name="chicken masala (3 pcs/6 pcs)">
-          <div><h3>Chicken Masala (3 pcs/6 Pcs)</h3></div><span class="price">₹231/304</span>
-        </div><div class="item" data-name="chicken do pyaja (3 pcs/6 pcs)">
-          <div><h3>Chicken Do Pyaja (3 pcs/6 Pcs)</h3></div><span class="price">₹231/304</span>
-        </div><div class="item" data-name="chicken lababdar (3 pcs/6 pcs)">
-          <div><h3>Chicken Lababdar (3 pcs/6 Pcs)</h3></div><span class="price">₹231/304</span>
-        </div><div class="item" data-name="kadhai chicken (3 pcs/6 pcs)">
-          <div><h3>Kadhai Chicken (3 pcs/6 Pcs)</h3></div><span class="price">₹231/304</span>
-        </div><div class="item" data-name="chicken kosha (3 pcs/6 pcs)">
-          <div><h3>Chicken Kosha (3 pcs/6 Pcs)</h3></div><span class="price">₹231/304</span>
-        </div><div class="item" data-name="chicken korma (3 pcs/6 pcs)">
-          <div><h3>Chicken Korma (3 pcs/6 Pcs)</h3></div><span class="price">₹276/346</span>
-        </div><div class="item" data-name="tandoori chicken butter masala – half">
-          <div><h3>Tandoori Chicken Butter Masala – Half</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori chicken butter masala – full">
-          <div><h3>Tandoori Chicken Butter Masala – Full</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Rice &amp; Indian Breads</h2><div class="item" data-name="plain rice">
-          <div><h3>Plain Rice</h3></div><span class="price">₹115</span>
-        </div><div class="item" data-name="jeera rice">
-          <div><h3>Jeera Rice</h3></div><span class="price">₹136</span>
-        </div><div class="item" data-name="veg pulao">
-          <div><h3>Veg Pulao</h3></div><span class="price">₹146</span>
-        </div><div class="item" data-name="kashmiri pulao">
-          <div><h3>Kashmiri Pulao</h3></div><span class="price">₹199</span>
-        </div><div class="item" data-name="chicken pulao">
-          <div><h3>Chicken Pulao</h3></div><span class="price">₹199</span>
-        </div><div class="item" data-name="tawa roti – plain">
-          <div><h3>Tawa Roti – Plain</h3></div><span class="price">₹21</span>
-        </div><div class="item" data-name="tawa roti – butter">
-          <div><h3>Tawa Roti – Butter</h3></div><span class="price">₹27</span>
-        </div><div class="item" data-name="lachaa paratha">
-          <div><h3>Lachaa Paratha</h3></div><span class="price">₹52</span>
-        </div><div class="item" data-name="naan – plain">
-          <div><h3>Naan – Plain</h3></div><span class="price">₹52</span>
-        </div><div class="item" data-name="garlic naan">
-          <div><h3>Garlic Naan</h3></div><span class="price">₹62</span>
-        </div><div class="item" data-name="masala kulcha">
-          <div><h3>Masala Kulcha</h3></div><span class="price">₹73</span>
-        </div><div class="item" data-name="kashmiri naan">
-          <div><h3>Kashmiri Naan</h3></div><span class="price">₹73</span>
-        </div></section>
-<section class="category"><h2>Tandooris</h2><div class="item" data-name="tandoori mushroom">
-          <div><h3>Tandoori Mushroom</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="paneer tikka">
-          <div><h3>Paneer Tikka</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="paneer achari tikka">
-          <div><h3>Paneer Achari Tikka</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="fish tikka">
-          <div><h3>Fish Tikka</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori prawns">
-          <div><h3>Tandoori Prawns</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori wings – 4 pcs">
-          <div><h3>Tandoori Wings – 4 Pcs</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori wings – 6 pcs">
-          <div><h3>Tandoori Wings – 6 Pcs</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="chicken tikka (6 pcs/8 pcs)">
-          <div><h3>Chicken Tikka (6 pcs/8 pcs)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="chicken malai tikka (6 pcs/8 pcs)">
-          <div><h3>Chicken Malai Tikka (6 Pcs/8 Pcs)</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori chicken half">
-          <div><h3>Tandoori Chicken Half</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="tandoori chicken full">
-          <div><h3>Tandoori Chicken Full</h3></div><span class="price pending">Price</span>
-        </div></section>
-<section class="category"><h2>Continental Cuisines</h2><div class="item" data-name="spanish tomatino">
-          <div><h3>Spanish Tomatino</h3></div><span class="price">₹330/346</span>
-        </div><div class="item" data-name="margherita">
-          <div><h3>Margherita</h3></div><span class="price">₹314</span>
-        </div><div class="item" data-name="paneer golden delite">
-          <div><h3>Paneer Golden Delite</h3></div><span class="price">₹346</span>
-        </div><div class="item" data-name="cheesy &amp; exotic carnival">
-          <div><h3>Cheesy &amp; Exotic Carnival</h3></div><span class="price">₹346</span>
-        </div><div class="item" data-name="chicken golden delite">
-          <div><h3>Chicken Golden Delite</h3></div><span class="price">₹346</span>
-        </div><div class="item" data-name="fusion mixed">
-          <div><h3>Fusion Mixed</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="monk special veg burger">
-          <div><h3>Monk Special Veg Burger</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="regular chicken burger">
-          <div><h3>Regular Chicken Burger</h3></div><span class="price pending">Price</span>
-        </div><div class="item" data-name="monk special chicken burger">
-          <div><h3>Monk Special Chicken Burger</h3></div><span class="price">₹163</span>
-        </div></section>
-<section class="category"><h2>Chef Specials</h2><div class="item" data-name="thai chicken red curry – served with butter rice">
-          <div><h3>Thai Chicken Red Curry – served with Butter Rice</h3></div><span class="price">₹346</span>
-        </div><div class="item" data-name="rice paper spring roll – paneer">
-          <div><h3>Rice Paper Spring Roll – Paneer</h3></div><span class="price">₹188</span>
-        </div><div class="item" data-name="rice paper spring roll – chicken">
-          <div><h3>Rice Paper Spring Roll – Chicken</h3></div><span class="price">₹230</span>
-        </div><div class="item" data-name="rice paper spring roll – prawn">
-          <div><h3>Rice Paper Spring Roll – Prawn</h3></div><span class="price">₹293</span>
-        </div><div class="item" data-name="chicken shaphaley">
-          <div><h3>Chicken Shaphaley</h3></div><span class="price">₹209</span>
-        </div></section></div>
-<div class="note">ℹ️ Rates shown are based on the uploaded Hungry Monk menu. Items marked “Price” need confirmation before publishing the final version. GST and packing charges are as stated on the menu.</div>
+<div class="search">
+  <input id="search" type="search" placeholder="🔎 Search dishes..." oninput="filterMenu()">
+</div>
+<div id="menu"></div>
+
+<div class="note">
+  ℹ️ Rates are shown as currently set in your digital menu. Items with a blank price need confirmation.
+  GST and packing charges are as applicable.
+</div>
+
 <div class="actions">
-<a class="btn whatsapp" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20want%20to%20place%20an%20order." target="_blank">💬 WhatsApp Order</a>
-<a class="btn call" href="tel:+916901410360">📞 Call</a>
+  <a class="btn whatsapp" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20want%20to%20place%20an%20order." target="_blank">💬 WhatsApp Order</a>
+  <a class="btn call" href="tel:+916901410360">📞 Call</a>
 </div>
 </div>
 <footer>Hungry Monk • Thank you for visiting us ❤️</footer>
+
 <script>
-function filterMenu(){
- const q=document.getElementById('search').value.toLowerCase().trim();
- document.querySelectorAll('.item').forEach(x=>x.classList.toggle('hidden',q && !x.dataset.name.includes(q)));
- document.querySelectorAll('.category').forEach(c=>{
-   const visible=[...c.querySelectorAll('.item')].some(x=>!x.classList.contains('hidden'));
-   c.classList.toggle('hidden',!visible);
- });
+/*
+========================================================
+🍽️ EASY PRICE UPDATE AREA — EDIT ONLY THIS SECTION
+========================================================
+To change a price, find the dish and change ONLY the price.
+
+Example:
+  { name: "French Fries", price: "₹260" },
+
+For two prices:
+  { name: "Paneer Do Pyaja (4 Pcs/6 Pcs)", price: "₹220/₹293" },
+
+If an item has no confirmed price, leave price as:
+  price: ""
+
+After editing this section on GitHub:
+SAVE/COMMIT the file → wait a few minutes → refresh your website.
+
+You do NOT need to change the HTML below this section.
+========================================================
+*/
+const MENU_DATA = [
+  { category: "Vegetarian Starters", items: [
+    { name: "French Fries", price: "₹251" },
+    { name: "Peri Peri Fries", price: "₹251" },
+    { name: "Honey Chilli Potatoes", price: "₹251" },
+    { name: "Cheesy Fries", price: "₹251" },
+    { name: "American Corn Salt & Pepper", price: "₹251" },
+    { name: "Crispy Chilli Babycorn", price: "₹241" },
+    { name: "Honey Chilli Babycorn", price: "₹262" },
+    { name: "Mushroom Salt & Pepper", price: "₹262" },
+    { name: "Chilli Mushroom Dry", price: "₹283" },
+    { name: "Chilli Paneer Dry", price: "₹283" },
+  ]},
+  { category: "Non-Vegetarian Starters", items: [
+    { name: "Chicken Dry Fry", price: "₹283" },
+    { name: "Dragon Fierry Chicken", price: "₹283" },
+    { name: "Chicken 65", price: "₹283" },
+    { name: "Crispy Konjee Chicken", price: "₹283" },
+    { name: "Crispy Honey Chicken", price: "₹283" },
+    { name: "Chicken Lollypop (6 Pcs)", price: "₹314" },
+    { name: "Chicken Dry Fry (Thai Style)", price: "" },
+    { name: "Butter Garlic Chicken (Dry)", price: "" },
+    { name: "Drum of Heaven (4pcs/6pcs)", price: "₹242/283" },
+    { name: "BBQ Wings (4pcs/6pcs)", price: "₹242/283" },
+    { name: "Dragon Fierry Fish", price: "" },
+    { name: "Fish Finger", price: "" },
+    { name: "Thai Fried Fish", price: "" },
+    { name: "Dragon Fierry Prawns", price: "" },
+    { name: "Golden Fried Prawns", price: "" },
+    { name: "Butter Garlic Fish / Prawns (Dry)", price: "" },
+  ]},
+  { category: "Beverages", items: [
+    { name: "Cold Drink (300 ml)", price: "" },
+    { name: "Masala Cold Drink", price: "" },
+    { name: "Fresh Lime Soda", price: "" },
+    { name: "Virgin Mojito", price: "" },
+    { name: "Blue Lagoon", price: "" },
+    { name: "Mango Mule", price: "" },
+  ]},
+  { category: "Tea & Coffee", items: [
+    { name: "Monk Tea (Serves 2)", price: "" },
+    { name: "Lemon Green Tea (Serves 2)", price: "" },
+    { name: "Rose Petal Green Tea (Serves 2)", price: "" },
+    { name: "Black Coffee", price: "" },
+    { name: "Caffe Latte", price: "" },
+    { name: "Cold Coffee", price: "" },
+  ]},
+  { category: "Veg Momos", items: [
+    { name: "Veg Steam Momo", price: "₹115" },
+    { name: "Veg Fried Momo", price: "₹115" },
+    { name: "Veg Cheese Steam Momo", price: "₹136" },
+    { name: "Honey Spiced Veg Pan-Fried Momo", price: "" },
+    { name: "Spicy Schezwan Veg Pan-Fried Momo", price: "" },
+    { name: "Butter Masala Veg Momo", price: "" },
+    { name: "Veg Tandoori Momo", price: "" },
+    { name: "Tandoori Malai Veg Momo", price: "" },
+    { name: "Cheesy Mornai Veg Momo", price: "" },
+  ]},
+  { category: "Chicken Momos", items: [
+    { name: "Chicken Steam Momo", price: "₹115" },
+    { name: "Chicken Fried Momo", price: "" },
+    { name: "Honey Spiced Chicken Pan-Fried Momo", price: "" },
+    { name: "Spicy Schezwan Chicken Pan-Fried Momo", price: "" },
+    { name: "Butter Masala Chicken Momo", price: "" },
+    { name: "Chicken Tandoori Momo", price: "" },
+    { name: "Chicken Tandoori Malai Momo", price: "" },
+    { name: "Cheesy Mornai Chicken Momo", price: "" },
+  ]},
+  { category: "Soups", items: [
+    { name: "Sweet Corn Soup", price: "" },
+    { name: "Hot 'N' Sour Soup", price: "" },
+    { name: "Manchow Soup", price: "" },
+    { name: "Lemon 'N' Corriander Soup", price: "₹136" },
+    { name: "Creamy Mushroom Soup", price: "₹146" },
+  ]},
+  { category: "Oriental Main Course – Rice & Noodles", items: [
+    { name: "Veg Fried Rice", price: "₹146" },
+    { name: "Veg Schezwan Fried Rice", price: "₹157" },
+    { name: "Veg Hakka Noodles", price: "₹146" },
+    { name: "Veg Hot Garlic Noodles", price: "₹157" },
+    { name: "Mixed Chinese Chop Suey", price: "₹230" },
+    { name: "Mixed American Chop Suey", price: "₹230" },
+  ]},
+  { category: "Oriental Main Course – Vegetarian", items: [
+    { name: "Veg Manchurian", price: "₹199" },
+    { name: "Mixed Vegetables in Hot Garlic Sauce", price: "₹262" },
+    { name: "Chilli Paneer", price: "" },
+  ]},
+  { category: "Oriental Main Course – Non-Vegetarian", items: [
+    { name: "Chilli Chicken", price: "₹272" },
+    { name: "Chilli Fish", price: "₹293" },
+    { name: "Chilli Fish (sweet, sour & spicy)", price: "₹293" },
+    { name: "Chilli Prawn", price: "₹314" },
+  ]},
+  { category: "Combo Platters – Vegetarian", items: [
+    { name: "Veg Moburg", price: "₹167" },
+    { name: "Oriental Veg Delite", price: "₹209" },
+    { name: "Oriental Paneer Delite", price: "" },
+    { name: "Indian Paneer Delite", price: "₹241" },
+  ]},
+  { category: "Combo Platters – Non-Vegetarian", items: [
+    { name: "Chicken Moburg", price: "₹199" },
+    { name: "Oriental Chicken Delite", price: "₹230" },
+    { name: "Indian Chicken Delite", price: "₹251" },
+    { name: "Tandoor-Se-Combo Delite", price: "₹472" },
+  ]},
+  { category: "North Indian – Vegetarian", items: [
+    { name: "Dal Makhani", price: "₹188" },
+    { name: "Mix Veg", price: "₹230" },
+    { name: "Mushroom Masala", price: "₹262" },
+    { name: "Matar Paneer", price: "" },
+    { name: "Paneer Do Pyaja (4 Pcs/6 Pcs)", price: "₹220/293" },
+    { name: "Kadhai Paneer (4 Pcs/6 Pcs)", price: "₹220/293" },
+    { name: "Paneer Lababdar (4 Pcs/6 Pcs)", price: "₹220/293" },
+    { name: "Paneer Butter Masala (4 Pcs)", price: "₹209" },
+    { name: "Paneer Butter Masala (6 Pcs)", price: "₹293" },
+    { name: "Shahi Paneer (4 Pcs/6 Pcs)", price: "₹264/346" },
+  ]},
+  { category: "North Indian – Non-Vegetarian", items: [
+    { name: "Chicken Masala (3 pcs/6 Pcs)", price: "₹231/304" },
+    { name: "Chicken Do Pyaja (3 pcs/6 Pcs)", price: "₹231/304" },
+    { name: "Chicken Lababdar (3 pcs/6 Pcs)", price: "₹231/304" },
+    { name: "Kadhai Chicken (3 pcs/6 Pcs)", price: "₹231/304" },
+    { name: "Chicken Kosha (3 pcs/6 Pcs)", price: "₹231/304" },
+    { name: "Chicken Korma (3 pcs/6 Pcs)", price: "₹276/346" },
+    { name: "Tandoori Chicken Butter Masala – Half", price: "" },
+    { name: "Tandoori Chicken Butter Masala – Full", price: "" },
+  ]},
+  { category: "Rice & Indian Breads", items: [
+    { name: "Plain Rice", price: "₹115" },
+    { name: "Jeera Rice", price: "₹136" },
+    { name: "Veg Pulao", price: "₹146" },
+    { name: "Kashmiri Pulao", price: "₹199" },
+    { name: "Chicken Pulao", price: "₹199" },
+    { name: "Tawa Roti – Plain", price: "₹21" },
+    { name: "Tawa Roti – Butter", price: "₹27" },
+    { name: "Lachaa Paratha", price: "₹52" },
+    { name: "Naan – Plain", price: "₹52" },
+    { name: "Garlic Naan", price: "₹62" },
+    { name: "Masala Kulcha", price: "₹73" },
+    { name: "Kashmiri Naan", price: "₹73" },
+  ]},
+  { category: "Tandooris", items: [
+    { name: "Tandoori Mushroom", price: "" },
+    { name: "Paneer Tikka", price: "" },
+    { name: "Paneer Achari Tikka", price: "" },
+    { name: "Fish Tikka", price: "" },
+    { name: "Tandoori Prawns", price: "" },
+    { name: "Tandoori Wings – 4 Pcs", price: "" },
+    { name: "Tandoori Wings – 6 Pcs", price: "" },
+    { name: "Chicken Tikka (6 pcs/8 pcs)", price: "" },
+    { name: "Chicken Malai Tikka (6 Pcs/8 Pcs)", price: "" },
+    { name: "Tandoori Chicken Half", price: "" },
+    { name: "Tandoori Chicken Full", price: "" },
+  ]},
+  { category: "Continental Cuisines", items: [
+    { name: "Spanish Tomatino", price: "₹330/346" },
+    { name: "Margherita", price: "₹314" },
+    { name: "Paneer Golden Delite", price: "₹346" },
+    { name: "Cheesy & Exotic Carnival", price: "₹346" },
+    { name: "Chicken Golden Delite", price: "₹346" },
+    { name: "Fusion Mixed", price: "" },
+    { name: "Monk Special Veg Burger", price: "" },
+    { name: "Regular Chicken Burger", price: "" },
+    { name: "Monk Special Chicken Burger", price: "₹163" },
+  ]},
+  { category: "Chef Specials", items: [
+    { name: "Thai Chicken Red Curry – served with Butter Rice", price: "₹346" },
+    { name: "Rice Paper Spring Roll – Paneer", price: "₹188" },
+    { name: "Rice Paper Spring Roll – Chicken", price: "₹230" },
+    { name: "Rice Paper Spring Roll – Prawn", price: "₹293" },
+    { name: "Chicken Shaphaley", price: "₹209" },
+  ]},
+];
+
+/* The website automatically builds the menu from MENU_DATA. */
+function esc(value) {
+  return String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+
+function renderMenu() {
+  const menu = document.getElementById("menu");
+  menu.innerHTML = MENU_DATA.map(section => `
+    <section class="category">
+      <h2>${esc(section.category)}</h2>
+      ${section.items.map(item => `
+        <div class="item" data-name="${esc(item.name.toLowerCase())}">
+          <div><h3>${esc(item.name)}</h3></div>
+          <span class="price ${item.price ? "" : "pending"}">${item.price ? esc(item.price) : "Price"}</span>
+        </div>
+      `).join("")}
+    </section>
+  `).join("");
+}
+
+function filterMenu() {
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  document.querySelectorAll(".item").forEach(item => {
+    item.classList.toggle("hidden", q && !item.dataset.name.includes(q));
+  });
+  document.querySelectorAll(".category").forEach(category => {
+    const visible = [...category.querySelectorAll(".item")].some(item => !item.classList.contains("hidden"));
+    category.classList.toggle("hidden", !visible);
+  });
+}
+
+renderMenu();
 </script>
 </body>
 </html>
