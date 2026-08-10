@@ -23,6 +23,34 @@
 footer{text-align:center;color:#a99b87;padding:30px 15px 70px;font-size:13px}
 .search{width:100%;padding:13px 15px;border-radius:12px;border:1px solid #4b3b26;background:#181512;color:#fff;margin:10px 0 4px;font-size:15px}
 @media(max-width:520px){.hero h1{font-size:34px}.item{grid-template-columns:1fr auto}.order{grid-column:2;grid-row:1}}
+
+/* Quantity + Cart */
+.item{grid-template-columns:1fr auto auto;gap:9px}
+.qty-controls{display:flex;align-items:center;gap:6px}
+.qty-btn{width:30px;height:30px;border:1px solid #c9a35b;border-radius:50%;background:#201a13;color:#fff;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
+.qty-btn:active{transform:scale(.94)}
+.qty{min-width:22px;text-align:center;font-weight:800;color:#fff}
+.order{cursor:pointer;border:0}
+.cart-fab{position:fixed;right:16px;bottom:18px;z-index:20;border:1px solid #c9a35b;background:#c9a35b;color:#111;padding:12px 17px;border-radius:999px;font-weight:900;box-shadow:0 5px 20px rgba(0,0,0,.45);cursor:pointer}
+.cart-fab small{font-weight:700}
+.cart-panel{display:none;position:fixed;right:16px;bottom:76px;z-index:19;width:min(390px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#181512;border:1px solid #6e552f;border-radius:16px;padding:16px;box-shadow:0 10px 35px rgba(0,0,0,.65)}
+.cart-panel.open{display:block}
+.cart-panel h3{margin:0 0 12px;color:#e7c47e;font-family:Georgia,serif;font-size:22px}
+.cart-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #30271d;font-size:14px}
+.cart-row span:last-child{white-space:nowrap;color:#e7c47e;font-weight:800}
+.cart-total{display:flex;justify-content:space-between;margin-top:14px;font-size:17px;font-weight:900}
+.cart-actions{display:flex;gap:8px;margin-top:14px}
+.cart-actions button{flex:1;padding:11px;border-radius:10px;border:1px solid #c9a35b;background:#201a13;color:#fff;font-weight:800;cursor:pointer}
+.cart-actions .wa{background:#c9a35b;color:#111}
+@media(max-width:520px){
+ .item{grid-template-columns:1fr auto;align-items:center}
+ .qty-controls{grid-column:2;grid-row:1}
+ .order{grid-column:1;grid-row:2;justify-self:start;margin-top:3px}
+}
+
+
+.gst-row{display:flex;justify-content:space-between;margin-top:7px;font-size:14px;color:#cfc0a8}
+
 </style>
 </head>
 <body>
@@ -384,5 +412,128 @@ function filterItems(){
    sec.style.display=visible?'block':'none';
  });
 }
+</script>
+
+<button class="cart-fab" onclick="toggleCart()">🛒 Cart <small>(<span id="cartCount">0</span>)</small> • ₹<span id="cartTotal">0</span> incl. GST</button>
+<div id="cartPanel" class="cart-panel">
+  <h3>Your Order</h3>
+  <div id="cartItems"><div style="color:#a99b87;font-size:14px">Your cart is empty.</div></div>
+  <div class="cart-total"><span>Subtotal</span><span>₹<span id="panelSubtotal">0</span></span></div><div class="gst-row"><span>GST (5%)</span><span>₹<span id="panelGst">0</span></span></div><div class="cart-total"><span>Grand Total</span><span>₹<span id="panelTotal">0</span></span></div>
+  <div class="cart-actions">
+    <button onclick="clearCart()">Clear</button>
+    <button class="wa" onclick="sendWhatsAppOrder()">💬 Order on WhatsApp</button>
+  </div>
+</div>
+
+<script>
+
+const cart = {};
+
+function itemData(link){
+  const item = link.closest('.item');
+  const name = item.querySelector('.name')?.textContent.trim() || 'Item';
+  const priceText = item.querySelector('.price')?.textContent.trim() || '₹0';
+  const nums = priceText.replace(/,/g,'').match(/\d+(?:\.\d+)?/g) || ['0'];
+  const price = parseFloat(nums[0]) || 0;
+  return {name, price, priceText};
+}
+
+function updateCart(){
+  let count = 0, total = 0;
+  const box = document.getElementById('cartItems');
+  const rows = Object.values(cart);
+  if(!rows.length){
+    box.innerHTML = '<div style="color:#a99b87;font-size:14px">Your cart is empty.</div>';
+  } else {
+    box.innerHTML = rows.map(x => {
+      const line = x.price * x.qty;
+      count += x.qty; total += line;
+      return `<div class="cart-row"><span>${x.name} × ${x.qty}</span><span>₹${line}</span></div>`;
+    }).join('');
+  }
+  // Recalculate if cart was empty or values were already processed
+  count = rows.reduce((a,x)=>a+x.qty,0);
+  total = rows.reduce((a,x)=>a+(x.price*x.qty),0);
+  const gst = total * 0.05;
+  const grandTotal = total + gst;
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = Math.round(grandTotal);
+  document.getElementById('panelSubtotal').textContent = Math.round(total);
+  document.getElementById('panelGst').textContent = Math.round(gst);
+  document.getElementById('panelTotal').textContent = Math.round(grandTotal);
+
+  document.querySelectorAll('.item').forEach(item=>{
+    const name = item.querySelector('.name')?.textContent.trim();
+    const q = item.querySelector('.qty');
+    if(q) q.textContent = cart[name]?.qty || 0;
+  });
+}
+
+function addItem(link){
+  const d = itemData(link);
+  if(!cart[d.name]) cart[d.name] = {name:d.name, price:d.price, priceText:d.priceText, qty:0};
+  cart[d.name].qty++;
+  updateCart();
+}
+
+function changeQty(link, delta){
+  const d = itemData(link);
+  if(!cart[d.name] && delta < 0) return;
+  if(!cart[d.name]) cart[d.name] = {name:d.name, price:d.price, priceText:d.priceText, qty:0};
+  cart[d.name].qty += delta;
+  if(cart[d.name].qty <= 0) delete cart[d.name];
+  updateCart();
+}
+
+function toggleCart(){
+  document.getElementById('cartPanel').classList.toggle('open');
+}
+
+function clearCart(){
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  updateCart();
+}
+
+function sendWhatsAppOrder(){
+  const rows = Object.values(cart);
+  if(!rows.length){ alert('Please add items to your order first.'); return; }
+  let total = rows.reduce((a,x)=>a+(x.price*x.qty),0);
+  const gst = total * 0.05;
+  const grandTotal = total + gst;
+  let msg = 'Hello Hungry Monk, I would like to order:%0A%0A';
+  rows.forEach(x=>{
+    msg += `${encodeURIComponent(x.name)} × ${x.qty} - ₹${Math.round(x.price*x.qty)}%0A`;
+  });
+  msg += `%0ASubtotal = ₹${Math.round(total)}%0AGST (5%) = ₹${Math.round(gst)}%0AGrand Total = ₹${Math.round(grandTotal)}%0A%0AThank you!`;
+  window.open('https://wa.me/916901410360?text=' + msg, '_blank');
+}
+
+document.querySelectorAll('.item .order').forEach(link=>{
+  const controls = document.createElement('div');
+  controls.className = 'qty-controls';
+  controls.innerHTML = `<button class="qty-btn" type="button" aria-label="Decrease quantity">−</button><span class="qty">0</span><button class="qty-btn" type="button" aria-label="Increase quantity">+</button>`;
+  link.parentNode.insertBefore(controls, link);
+  link.textContent = 'Add';
+  link.removeAttribute('href');
+  link.removeAttribute('target');
+  link.removeAttribute('rel');
+
+  const minus = controls.querySelectorAll('.qty-btn')[0];
+  const plus = controls.querySelectorAll('.qty-btn')[1];
+  minus.addEventListener('click', ()=>changeQty(link,-1));
+  plus.addEventListener('click', ()=>changeQty(link,1));
+  link.addEventListener('click', ()=>addItem(link));
+});
+
+function filterItems(){
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  document.querySelectorAll('.item').forEach(item=>{
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+updateCart();
+
 </script>
 </body></html>
