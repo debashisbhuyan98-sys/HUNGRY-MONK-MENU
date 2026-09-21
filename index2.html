@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="#15120f" name="theme-color"/>
+<title>Hungry Monk - Digital Menu</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#111;color:#f8f4ed}
+.hero{padding:38px 18px 26px;text-align:center;background:radial-gradient(circle at top,#3a2b1c,#111 65%);border-bottom:1px solid #6e552f}
+.hero h1{margin:0;font-family:Georgia,serif;font-size:42px;letter-spacing:1px} .hero p{margin:8px 0;color:#d7c4a0}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.btn{padding:11px 16px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid #c9a35b;color:#fff;background:#201a13}
+.btn.primary{background:#c9a35b;color:#111}
+.sticky{position:sticky;top:0;z-index:5;background:rgba(17,17,17,.96);backdrop-filter:blur(8px);padding:10px;overflow:auto;white-space:nowrap;border-bottom:1px solid #33291d}
+.sticky a{display:inline-block;color:#e9d6ae;text-decoration:none;padding:9px 12px;border:1px solid #4b3b26;border-radius:20px;margin-right:6px;font-size:13px}
+.wrap{max-width:900px;margin:auto;padding:12px}
+.section{scroll-margin-top:70px;margin:24px 0 34px} .section>h2{font-family:Georgia,serif;color:#d9b46b;font-size:29px;margin:0 0 14px;border-bottom:1px solid #493b29;padding-bottom:8px}
+.group{margin:16px 0} .group h3{margin:0 0 8px;color:#fff0cf;font-size:18px}
+.item{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;padding:12px 8px;border-bottom:1px solid #29231c}
+.name{font-size:15px} .price{font-weight:800;color:#e7c47e;white-space:nowrap}
+.order{font-size:11px;text-decoration:none;color:#15120f;background:#d9b46b;padding:6px 9px;border-radius:14px;font-weight:800}
+.note{background:#1d1812;border:1px solid #4c3b24;padding:15px;border-radius:12px;color:#d8c9b1;font-size:13px;line-height:1.6}
+footer{text-align:center;color:#a99b87;padding:30px 15px 70px;font-size:13px}
+.search{width:100%;padding:13px 15px;border-radius:12px;border:1px solid #4b3b26;background:#181512;color:#fff;margin:10px 0 4px;font-size:15px}
+@media(max-width:520px){.hero h1{font-size:34px}.item{grid-template-columns:1fr auto}.order{grid-column:2;grid-row:1}}
+
+/* Quantity + Cart */
+.item{grid-template-columns:1fr auto auto;gap:9px}
+.qty-controls{display:flex;align-items:center;gap:6px}
+.qty-btn{width:30px;height:30px;border:1px solid #c9a35b;border-radius:50%;background:#201a13;color:#fff;font-size:18px;font-weight:800;line-height:1;cursor:pointer}
+.qty-btn:active{transform:scale(.94)}
+.qty{min-width:22px;text-align:center;font-weight:800;color:#fff}
+.order{cursor:pointer;border:0}
+.cart-fab{position:fixed;right:16px;bottom:18px;z-index:20;border:1px solid #c9a35b;background:#c9a35b;color:#111;padding:12px 17px;border-radius:999px;font-weight:900;box-shadow:0 5px 20px rgba(0,0,0,.45);cursor:pointer}
+.cart-fab small{font-weight:700}
+.cart-panel{display:none;position:fixed;right:16px;bottom:76px;z-index:19;width:min(390px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#181512;border:1px solid #6e552f;border-radius:16px;padding:16px;box-shadow:0 10px 35px rgba(0,0,0,.65)}
+.cart-panel.open{display:block}
+.cart-panel h3{margin:0 0 12px;color:#e7c47e;font-family:Georgia,serif;font-size:22px}
+.cart-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #30271d;font-size:14px}
+.cart-row span:last-child{white-space:nowrap;color:#e7c47e;font-weight:800}
+.cart-total{display:flex;justify-content:space-between;margin-top:14px;font-size:17px;font-weight:900}
+.cart-actions{display:flex;gap:8px;margin-top:14px}
+.cart-actions button{flex:1;padding:11px;border-radius:10px;border:1px solid #c9a35b;background:#201a13;color:#fff;font-weight:800;cursor:pointer}
+.cart-actions .wa{background:#c9a35b;color:#111}
+@media(max-width:520px){
+ .item{grid-template-columns:1fr auto;align-items:center}
+ .qty-controls{grid-column:2;grid-row:1}
+ .order{grid-column:1;grid-row:2;justify-self:start;margin-top:3px}
+}
+
+
+.gst-row{display:flex;justify-content:space-between;margin-top:7px;font-size:14px;color:#cfc0a8}
+
+
+.variant-hint{font-size:12px;color:#bca98b;margin-top:3px}
+.variant-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);align-items:flex-end;justify-content:center;padding:16px}
+.variant-modal.open{display:flex}
+.variant-box{width:min(430px,100%);background:#181512;border:1px solid #6e552f;border-radius:18px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.7)}
+.variant-box h3{margin:0 0 5px;color:#e7c47e;font-family:Georgia,serif;font-size:22px}
+.variant-box p{margin:0 0 14px;color:#cfc0a8;font-size:13px}
+.variant-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.variant-option{padding:13px 10px;border-radius:12px;border:1px solid #c9a35b;background:#201a13;color:#fff;text-align:left;font-weight:800;cursor:pointer}
+.variant-option span{display:block;color:#e7c47e;margin-top:4px}
+.variant-close{width:100%;margin-top:12px;padding:11px;border-radius:10px;border:1px solid #4b3b26;background:#111;color:#ddd;font-weight:800;cursor:pointer}
+</style>
+</head>
+<body>
+<header class="hero"><h1>HUNGRY MONK</h1><p>RESTRO CAFE • Digital Menu</p>
+<div class="actions"><a class="btn primary" href="tel:+916901410360">📞 Call to Order</a>
+<a class="btn" href="https://wa.me/916901410360" rel="noopener" target="_blank">💬 WhatsApp</a></div></header>
+<nav class="sticky"><a href="#sec-0">Oriental Starters</a><a href="#sec-1">Momo &amp; Soups</a><a href="#sec-2">Oriental Main Course</a><a href="#sec-3">Combo Platters &amp; Sizzler</a><a href="#sec-4">North Indian</a><a href="#sec-5">Continental</a><a href="#sec-6">Chef Specials</a></nav>
+<main class="wrap"><input class="search" id="search" oninput="filterItems()" placeholder="Search menu items..."/>
+<div id="menu"><section class="section" id="sec-0"><h2>Oriental Starters</h2><div class="group"><h3>Vegetarian</h3><div class="item"><div><div class="name">French Fries</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20French%20Fries%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Peri Peri Fries</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Peri%20Peri%20Fries%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Honey Chilli Potatoes</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Honey%20Chilli%20Potatoes%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Cheesy Fries</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cheesy%20Fries%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">American Corn Salt &amp; Pepper</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20American%20Corn%20Salt%20%26%20Pepper%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Crispy Chilli Babycorn</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Crispy%20Chilli%20Babycorn%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Honey Chilli Babycorn</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Honey%20Chilli%20Babycorn%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mushroom Salt &amp; Pepper</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mushroom%20Salt%20%26%20Pepper%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Mushroom Dry</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Mushroom%20Dry%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Paneer Dry</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Paneer%20Dry%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Non-Vegetarian</h3><div class="item"><div><div class="name">Chicken Dry Fry</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Dry%20Fry%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Dragon Fierry Chicken</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Dragon%20Fierry%20Chicken%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken 65</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%2065%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Crispy Konjee Chicken</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Crispy%20Konjee%20Chicken%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Crispy Honey Chicken</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Crispy%20Honey%20Chicken%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Lollypop (6 Pcs)</div></div>
+<div class="price">₹229</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Lollypop%20%286%20Pcs%29%20-%20%E2%82%B9229" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Dry Fry (Thai Style)</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Dry%20Fry%20%28Thai%20Style%29%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Butter Garlic Chicken (Dry)</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Butter%20Garlic%20Chicken%20%28Dry%29%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 219}, {"label": "6 Pcs", "price": 269}]'><div><div class="name">Drum of Heaven</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Drum%20of%20Heaven%20%284pcs/6Pcs%29%20-%20%E2%82%B9219/269" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 219}, {"label": "6 Pcs", "price": 269}]'><div><div class="name">BBQ Wings</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20BBQ%20Wings%20%284pcs/6Pcs%29%20-%20%E2%82%B9219/269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Dragon Fierry Fish</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Dragon%20Fierry%20Fish%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Fish Finger</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Fish%20Finger%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Thai Fried Fish</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Thai%20Fried%20Fish%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Dragon Fierry Prawns</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Dragon%20Fierry%20Prawns%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Golden Fried Prawns</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Golden%20Fried%20Prawns%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Butter Garlic Fish / Prawns (Dry)</div></div>
+<div class="price">₹299</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Butter%20Garlic%20Fish%20/%20Prawns%20%28Dry%29%20-%20%E2%82%B9299" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Beverages</h3><div class="item"><div><div class="name">Cold Drink (300 ml)</div></div>
+<div class="price">₹39</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cold%20Drink%20%28300%20ml%29%20-%20%E2%82%B939" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Masala Cold Drink</div></div>
+<div class="price">₹49</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Masala%20Cold%20Drink%20-%20%E2%82%B949" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Fresh Lime Soda</div></div>
+<div class="price">₹79</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Fresh%20Lime%20Soda%20-%20%E2%82%B979" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Virgin Mojito</div></div>
+<div class="price">₹129</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Virgin%20Mojito%20-%20%E2%82%B9129" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Blue Lagoon</div></div>
+<div class="price">₹129</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Blue%20Lagoon%20-%20%E2%82%B9129" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mango Mule</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mango%20Mule%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Tea &amp; Coffee</h3><div class="item"><div><div class="name">Black Tea (Serves 2)</div></div>
+<div class="price">₹39</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Black%20Tea%20%28Serves%202%29%20-%20%E2%82%B939" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Lemon Green Tea (Serves 2)</div></div>
+<div class="price">₹49</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Lemon%20Green%20Tea%20%28Serves%202%29%20-%20%E2%82%B949" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Rose Petal Green Tea (Serves 2)</div></div>
+<div class="price">₹69</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Rose%20Petal%20Green%20Tea%20%28Serves%202%29%20-%20%E2%82%B969" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Black Coffee</div></div>
+<div class="price">₹39</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Black%20Coffee%20-%20%E2%82%B939" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Caffe Latte</div></div>
+<div class="price">₹49</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Caffe%20Latte%20-%20%E2%82%B949" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Cold Coffee</div></div>
+<div class="price">₹129</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cold%20Coffee%20-%20%E2%82%B9129" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-1"><h2>Momo &amp; Soups</h2><div class="group"><h3>Veg Momos</h3><div class="item"><div><div class="name">Veg Steam Momo</div></div>
+<div class="price">₹109</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Steam%20Momo%20-%20%E2%82%B9109" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Fried Momo</div></div>
+<div class="price">₹119</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Fried%20Momo%20-%20%E2%82%B9119" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Cheese Steam Momo</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Cheese%20Steam%20Momo%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Honey Spiced Veg Pan-Fried Momo</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Honey%20Spiced%20Veg%20Pan-Fried%20Momo%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Spicy Schezwan Veg Pan-Fried Momo</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Spicy%20Schezwan%20Veg%20Pan-Fried%20Momo%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Butter Masala Veg Momo</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Butter%20Masala%20Veg%20Momo%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Tandoori Momo</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Tandoori%20Momo%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Malai Veg Momo</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Malai%20Veg%20Momo%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Cheesy Mornai Veg Momo</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cheesy%20Mornai%20Veg%20Momo%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Chicken Momos</h3><div class="item"><div><div class="name">Chicken Steam Momo</div></div>
+<div class="price">₹129</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Steam%20Momo%20-%20%E2%82%B9129" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Fried Momo</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Fried%20Momo%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Honey Spiced Chicken Pan-Fried Momo</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Honey%20Spiced%20Chicken%20Pan-Fried%20Momo%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Spicy Schezwan Chicken Pan-Fried Momo</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Spicy%20Schezwan%20Chicken%20Pan-Fried%20Momo%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Butter Masala Chicken Momo</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Butter%20Masala%20Chicken%20Momo%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Tandoori Momo</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Tandoori%20Momo%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Tandoori Malai Momo</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Tandoori%20Malai%20Momo%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Cheesy Mornai Chicken Momo</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cheesy%20Mornai%20Chicken%20Momo%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Soups</h3><div class="item"><div><div class="name">Sweet Corn Soup</div></div>
+<div class="price">₹Veg 109 / Chicken 125</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Sweet%20Corn%20Soup%20-%20%E2%82%B9Veg%20109%20/%20Chicken%20125" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Hot 'N' Sour Soup</div></div>
+<div class="price">₹Veg 109 / Chicken 125</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Hot%20%27N%27%20Sour%20Soup%20-%20%E2%82%B9Veg%20109%20/%20Chicken%20125" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Manchow Soup</div></div>
+<div class="price">₹Veg 129 / Chicken 145</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Manchow%20Soup%20-%20%E2%82%B9Veg%20129%20/%20Chicken%20145" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Lemon 'N' Corriander Soup</div></div>
+<div class="price">₹Veg 129 / Chicken 145</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Lemon%20%27N%27%20Corriander%20Soup%20-%20%E2%82%B9Veg%20129%20/%20Chicken%20145" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Creamy Mushroom Soup</div></div>
+<div class="price">₹Veg 139 / Chicken 155</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Creamy%20Mushroom%20Soup%20-%20%E2%82%B9Veg%20139%20/%20Chicken%20155" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-2"><h2>Oriental Main Course</h2><div class="group"><h3>Rice</h3><div class="item"><div><div class="name">Veg Fried Rice</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Fried%20Rice%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Schezwan Fried Rice</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Schezwan%20Fried%20Rice%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Fried Rice</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Fried%20Rice%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Schezwan Fried Rice</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Schezwan%20Fried%20Rice%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Fried Rice</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Fried%20Rice%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Schezwan Fried Rice</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Schezwan%20Fried%20Rice%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Noodles</h3><div class="item"><div><div class="name">Veg Hakka Noodles</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Hakka%20Noodles%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Hot Garlic Noodles</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Hot%20Garlic%20Noodles%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Gravy Chowmein</div></div>
+<div class="price">₹149</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Gravy%20Chowmein%20-%20%E2%82%B9149" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg Chinese Chop suey</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Chinese%20Chop%20suey%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg American Chop suey</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20American%20Chop%20suey%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Hakka Noodles</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Hakka%20Noodles%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Hot Garlic Noodles</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Hot%20Garlic%20Noodles%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Gravy Chowmein</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Gravy%20Chowmein%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Chinese Chop suey</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Chinese%20Chop%20suey%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken American Chop suey</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20American%20Chop%20suey%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Hakka Noodles</div></div>
+<div class="price">₹169</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Hakka%20Noodles%20-%20%E2%82%B9169" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Hot Garlic Noodles</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Hot%20Garlic%20Noodles%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Gravy Chowmein</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Gravy%20Chowmein%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Chinese Chop suey</div></div>
+<div class="price">₹219</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Chinese%20Chop%20suey%20-%20%E2%82%B9219" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed American Chop suey</div></div>
+<div class="price">₹219</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20American%20Chop%20suey%20-%20%E2%82%B9219" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Vegetarian</h3><div class="item"><div><div class="name">Veg Manchurian</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Manchurian%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Mushroom</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Mushroom%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Hot Garlic Mushroom</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Hot%20Garlic%20Mushroom%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Paneer</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Paneer%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer Manchurian</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Manchurian%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Hot Garlic Paneer</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Hot%20Garlic%20Paneer%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mixed Vegetables in Hot garlic Sauce</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mixed%20Vegetables%20in%20Hot%20garlic%20Sauce%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Non-Vegetarian</h3><div class="item"><div><div class="name">Chilli Chicken</div></div>
+<div class="price">₹259</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Chicken%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Manchurian</div></div>
+<div class="price">₹259</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Manchurian%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Hot Garlic Chicken</div></div>
+<div class="price">₹259</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Hot%20Garlic%20Chicken%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Garlic Chicken</div></div>
+<div class="price">₹259</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Garlic%20Chicken%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Fish</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Fish%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Hot Garlic Fish</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Hot%20Garlic%20Fish%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chilli Prawn</div></div>
+<div class="price">₹299</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chilli%20Prawn%20-%20%E2%82%B9299" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-3"><h2>Combo Platters &amp; Sizzler</h2><div class="group"><h3>Vegetarian</h3><div class="item"><div><div class="name">Veg Moburg</div></div>
+<div class="price">₹159</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20Moburg%20-%20%E2%82%B9159" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Veg Delite</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Veg%20Delite%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Paneer Delite</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Paneer%20Delite%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Indian Paneer Delite</div></div>
+<div class="price">₹229</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Indian%20Paneer%20Delite%20-%20%E2%82%B9229" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Non-Vegetarian</h3><div class="item"><div><div class="name">Chicken Moburg</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Moburg%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Chicken Delite</div></div>
+<div class="price">₹219</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Chicken%20Delite%20-%20%E2%82%B9219" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Indian Chicken Delite</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Indian%20Chicken%20Delite%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoor-Se-Combo Delite</div></div>
+<div class="price">₹449</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoor-Se-Combo%20Delite%20-%20%E2%82%B9449" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Sizzler on Plate</h3><div class="item"><div><div class="name">Sizzling Chicken Momo Platter</div></div>
+<div class="price">₹259</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Sizzling%20Chicken%20Momo%20Platter%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Veg Sizzlers</div></div>
+<div class="price">₹289</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Veg%20Sizzlers%20-%20%E2%82%B9289" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Paneer Sizzlers</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Paneer%20Sizzlers%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Oriental Chicken Sizzler</div></div>
+<div class="price">₹369</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Oriental%20Chicken%20Sizzler%20-%20%E2%82%B9369" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Peri Peri Chicken Sizzler</div></div>
+<div class="price">₹369</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Peri%20Peri%20Chicken%20Sizzler%20-%20%E2%82%B9369" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-4"><h2>North Indian</h2><div class="group"><h3>Vegetarian</h3><div class="item"><div><div class="name">Dal makhani</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Dal%20makhani%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mix veg</div></div>
+<div class="price">₹219</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mix%20veg%20-%20%E2%82%B9219" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Mushroom masala</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Mushroom%20masala%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Motor paneer</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Motor%20paneer%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 199}, {"label": "6 Pcs", "price": 279}]'><div><div class="name">Paneer Do pyaja</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Do%20pyaja%20%284%20Pcs/6Pcs%29%20-%20%E2%82%B9199/279" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 199}, {"label": "6 Pcs", "price": 279}]'><div><div class="name">Kadhai paneer</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Kadhai%20paneer%20%284%20Pcs/6Pcs%29%20-%20%E2%82%B9199/279" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 199}, {"label": "6 Pcs", "price": 279}]'><div><div class="name">Paneer Lababdar</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Lababdar%20%284%20Pcs/6Pcs%29%20-%20%E2%82%B9199/279" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer butter masala (4 Pcs)</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20butter%20masala%20%284%20Pcs%29%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer butter masala (6 Pcs)</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20butter%20masala%20%286%20Pcs%29%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "4 Pcs", "price": 239}, {"label": "6 Pcs", "price": 329}]'><div><div class="name">Shahi Paneer</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Shahi%20Paneer%20%284%20Pcs/6Pcs%29%20-%20%E2%82%B9239/329" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Non-Vegetarian</h3><div class="item" data-variants='[{"label": "3 Pcs", "price": 209}, {"label": "6 Pcs", "price": 289}]'><div><div class="name">Chicken Masala</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Masala%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9209/289" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "3 Pcs", "price": 209}, {"label": "6 Pcs", "price": 289}]'><div><div class="name">Chicken Do Pyaja</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Do%20Pyaja%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9209/289" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "3 Pcs", "price": 209}, {"label": "6 Pcs", "price": 289}]'><div><div class="name">Chicken Lababdar</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Lababdar%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9209/289" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "3 Pcs", "price": 209}, {"label": "6 Pcs", "price": 289}]'><div><div class="name">Kadhai Chicken</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Kadhai%20Chicken%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9209/289" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "3 Pcs", "price": 209}, {"label": "6 Pcs", "price": 289}]'><div><div class="name">Chicken kosha</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20kosha%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9209/289" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "3 Pcs", "price": 249}, {"label": "6 Pcs", "price": 329}]'><div><div class="name">Chicken Korma</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Korma%20%283%20pcs/6Pcs%29%20-%20%E2%82%B9249/329" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "Half", "price": 319}, {"label": "Full", "price": 499}]'><div><div class="name">Tandoori Chicken Butter Masala</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Chicken%20Butter%20Masala%20Half%20-%20%E2%82%B9319" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Chicken Butter Masala Full</div></div>
+<div class="price">₹499</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Chicken%20Butter%20Masala%20Full%20-%20%E2%82%B9499" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Rice &amp; Breads</h3><div class="item"><div><div class="name">Plain rice</div></div>
+<div class="price">₹109</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Plain%20rice%20-%20%E2%82%B9109" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Jeera rice</div></div>
+<div class="price">₹129</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Jeera%20rice%20-%20%E2%82%B9129" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Veg pulao</div></div>
+<div class="price">₹139</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Veg%20pulao%20-%20%E2%82%B9139" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Kashmiri Pulao</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Kashmiri%20Pulao%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Pulao</div></div>
+<div class="price">₹189</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Pulao%20-%20%E2%82%B9189" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tawa Roti (P)</div></div>
+<div class="price">₹20</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tawa%20Roti%20%28P%29%20-%20%E2%82%B920" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tawa Roti (B)</div></div>
+<div class="price">₹25</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tawa%20Roti%20%28B%29%20-%20%E2%82%B925" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Lachaa Paratha</div></div>
+<div class="price">₹49</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Lachaa%20Paratha%20-%20%E2%82%B949" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Naan (P)</div></div>
+<div class="price">₹49</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Naan%20%28P%29%20-%20%E2%82%B949" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Naan (B)</div></div>
+<div class="price">₹59</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Naan%20%28B%29%20-%20%E2%82%B959" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Garlic Naan</div></div>
+<div class="price">₹69</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Garlic%20Naan%20-%20%E2%82%B969" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Masala Kulcha</div></div>
+<div class="price">₹69</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Masala%20Kulcha%20-%20%E2%82%B969" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Kashmiri Naan</div></div>
+<div class="price">₹79</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Kashmiri%20Naan%20-%20%E2%82%B979" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Tandoori's</h3><div class="item"><div><div class="name">Tandoori Mushroom</div></div>
+<div class="price">₹249</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Mushroom%20-%20%E2%82%B9249" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer Tikka</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Tikka%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer Achari Tikka</div></div>
+<div class="price">₹269</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Achari%20Tikka%20-%20%E2%82%B9269" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Fish Tikka</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Fish%20Tikka%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Prawns</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Prawns%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Wings - 4 Pcs</div></div>
+<div class="price">₹239</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Wings%20-%204%20Pcs%20-%20%E2%82%B9239" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Wings - 6 Pcs</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Wings%20-%206%20Pcs%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "6 Pcs", "price": 269}, {"label": "8 Pcs", "price": 329}]'><div><div class="name">Chicken Tikka</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Tikka%20%286pcs/8%20pcs%29%20-%20%E2%82%B9269/329" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "6 Pcs", "price": 279}, {"label": "8 Pcs", "price": 339}]'><div><div class="name">Chicken Malai Tikka</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Malai%20Tikka%20%286%20Pcs/8Pcs%29%20-%20%E2%82%B9279/339" rel="noopener" target="_blank">Order</a></div><div class="item" data-variants='[{"label": "Half", "price": 259}, {"label": "Full", "price": 389}]'><div><div class="name">Tandoori Chicken</div></div>
+<div class="price">Choose option</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Chicken%20Half%20-%20%E2%82%B9259" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Tandoori Chicken Full</div></div>
+<div class="price">₹389</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Tandoori%20Chicken%20Full%20-%20%E2%82%B9389" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-5"><h2>Continental</h2><div class="group"><h3>Pasta</h3><div class="item"><div><div class="name">Spanish Tomatino</div></div>
+<div class="price">₹299/329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Spanish%20Tomatino%20-%20%E2%82%B9299/329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Cheesy Alfredo</div></div>
+<div class="price">₹299/329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Cheesy%20Alfredo%20-%20%E2%82%B9299/329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Baked Pasta</div></div>
+<div class="price">₹349/399</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Baked%20Pasta%20-%20%E2%82%B9349/399" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Pizza</h3><div class="item"><div><div class="name">Margherita</div></div>
+<div class="price">₹299</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Margherita%20-%20%E2%82%B9299" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Paneer Golden Delite</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Paneer%20Golden%20Delite%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Exotic Carnival</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Exotic%20Carnival%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Golden Delite</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Golden%20Delite%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Fusion Mixed</div></div>
+<div class="price">₹349</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Fusion%20Mixed%20-%20%E2%82%B9349" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Burgers</h3><div class="item"><div><div class="name">Regular Veg Burger</div></div>
+<div class="price">₹125</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Regular%20Veg%20Burger%20-%20%E2%82%B9125" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Monk Special Veg Burger</div></div>
+<div class="price">₹145</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Monk%20Special%20Veg%20Burger%20-%20%E2%82%B9145" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Regular Chicken Burger</div></div>
+<div class="price">₹135</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Regular%20Chicken%20Burger%20-%20%E2%82%B9135" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Monk Special Chicken Burger</div></div>
+<div class="price">₹155</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Monk%20Special%20Chicken%20Burger%20-%20%E2%82%B9155" rel="noopener" target="_blank">Order</a></div></div><div class="group"><h3>Burger Add-ons</h3><div class="item"><div><div class="name">Extra Cheese</div></div>
+<div class="price">₹20</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Extra%20Cheese%20-%20%E2%82%B920" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Extra Egg</div></div>
+<div class="price">₹20</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Extra%20Egg%20-%20%E2%82%B920" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Double Patty</div></div>
+<div class="price">₹50</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Double%20Patty%20-%20%E2%82%B950" rel="noopener" target="_blank">Order</a></div></div></section><section class="section" id="sec-6"><h2>Chef Specials</h2><div class="group"><h3>Specials</h3><div class="item"><div><div class="name">Thai Chicken Red Curry</div></div>
+<div class="price">₹329</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Thai%20Chicken%20Red%20Curry%20-%20%E2%82%B9329" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Rice Paper Spring Roll - Paneer</div></div>
+<div class="price">₹179</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Rice%20Paper%20Spring%20Roll%20-%20Paneer%20-%20%E2%82%B9179" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Rice Paper Spring Roll - Chicken</div></div>
+<div class="price">₹219</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Rice%20Paper%20Spring%20Roll%20-%20Chicken%20-%20%E2%82%B9219" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Rice Paper Spring Roll - Prawn</div></div>
+<div class="price">₹279</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Rice%20Paper%20Spring%20Roll%20-%20Prawn%20-%20%E2%82%B9279" rel="noopener" target="_blank">Order</a></div><div class="item"><div><div class="name">Chicken Shaphaley</div></div>
+<div class="price">₹199</div>
+<a class="order" href="https://wa.me/916901410360?text=Hello%20Hungry%20Monk%2C%20I%20would%20like%20to%20order%3A%20Chicken%20Shaphaley%20-%20%E2%82%B9199" rel="noopener" target="_blank">Order</a></div></div></section></div>
+<div class="note"><b>Menu notes:</b><br/>All rates are exclusive of GST. Packing charges are applicable. No outside food or beverage is allowed. Items may require a minimum of 30 minutes for preparation. For soups, 1/2 portion costs an additional ₹20.</div>
+</main>
+<footer>Hungry Monk • For orders / enquiries: <a href="tel:+916901410360" style="color:#d9b46b">6901410360</a><br/>Prices reproduced from the supplied Hungry Monk menu PDF without any 5% increment.</footer>
+<script>
+function filterItems(){
+ const q=document.getElementById('search').value.toLowerCase();
+ document.querySelectorAll('.section').forEach(sec=>{
+   let visible=0;
+   sec.querySelectorAll('.item').forEach(i=>{const ok=i.innerText.toLowerCase().includes(q);i.style.display=ok?'grid':'none';if(ok)visible++;});
+   sec.style.display=visible?'block':'none';
+ });
+}
+</script>
+
+<div class="variant-modal" id="variantModal" onclick="if(event.target===this) closeVariantModal()">
+<div class="variant-box">
+<h3 id="variantTitle">Choose option</h3>
+<p>Select portion / quantity</p>
+<div class="variant-options" id="variantOptions"></div>
+<button class="variant-close" onclick="closeVariantModal()" type="button">Cancel</button>
+</div>
+</div>
+<button class="cart-fab" onclick="toggleCart()">🛒 Cart <small>(<span id="cartCount">0</span>)</small> • ₹<span id="cartTotal">0</span> incl. GST</button>
+<div class="cart-panel" id="cartPanel">
+<h3>Your Order</h3>
+<div id="cartItems"><div style="color:#a99b87;font-size:14px">Your cart is empty.</div></div>
+<div class="cart-total"><span>Subtotal</span><span>₹<span id="panelSubtotal">0</span></span></div><div class="gst-row"><span>GST (5%)</span><span>₹<span id="panelGst">0</span></span></div><div class="cart-total"><span>Grand Total</span><span>₹<span id="panelTotal">0</span></span></div>
+<div class="cart-actions">
+<button onclick="clearCart()">Clear</button>
+<button class="wa" onclick="sendWhatsAppOrder()">💬 Order on WhatsApp</button>
+</div>
+</div>
+<script>
+const cart = {};
+let pendingVariantLink = null;
+
+function itemData(link, selectedVariant=null){
+  const item = link.closest('.item');
+  const baseName = item.querySelector('.name')?.textContent.trim() || 'Item';
+  const priceText = item.querySelector('.price')?.textContent.trim() || '₹0';
+  const variants = item.dataset.variants ? JSON.parse(item.dataset.variants) : null;
+
+  if(variants && selectedVariant){
+    return {
+      name: `${baseName} - ${selectedVariant.label}`,
+      price: Number(selectedVariant.price),
+      priceText: `₹${selectedVariant.price}`
+    };
+  }
+
+  const nums = priceText.replace(/,/g,'').match(/\d+(?:\.\d+)?/g) || ['0'];
+  return {name:baseName, price:parseFloat(nums[0]) || 0, priceText};
+}
+
+function updateCart(){
+  const rows = Object.values(cart);
+  const box = document.getElementById('cartItems');
+
+  if(!rows.length){
+    box.innerHTML = '<div style="color:#a99b87;font-size:14px">Your cart is empty.</div>';
+  } else {
+    box.innerHTML = rows.map(x => {
+      const line = x.price * x.qty;
+      return `<div class="cart-row"><span>${x.name} × ${x.qty}</span><span>₹${Math.round(line)}</span></div>`;
+    }).join('');
+  }
+
+  const count = rows.reduce((a,x)=>a+x.qty,0);
+  const total = rows.reduce((a,x)=>a+(x.price*x.qty),0);
+  const gst = total * 0.05;
+  const grandTotal = total + gst;
+
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = Math.round(grandTotal);
+  document.getElementById('panelSubtotal').textContent = Math.round(total);
+  document.getElementById('panelGst').textContent = Math.round(gst);
+  document.getElementById('panelTotal').textContent = Math.round(grandTotal);
+
+  document.querySelectorAll('.item').forEach(item=>{
+    const baseName = item.querySelector('.name')?.textContent.trim();
+    const q = item.querySelector('.qty');
+    if(!q) return;
+    const matching = Object.values(cart).filter(x=>x.name===baseName || x.name.startsWith(baseName + ' - '));
+    q.textContent = matching.reduce((a,x)=>a+x.qty,0);
+  });
+}
+
+function addItem(link, selectedVariant=null){
+  const d = itemData(link, selectedVariant);
+  if(!cart[d.name]) cart[d.name] = {name:d.name, price:d.price, priceText:d.priceText, qty:0};
+  cart[d.name].qty++;
+  updateCart();
+}
+
+function changeQty(link, delta){
+  const item = link.closest('.item');
+  const variants = item.dataset.variants ? JSON.parse(item.dataset.variants) : null;
+
+  if(variants){
+    // For a variant item, + opens the selector. − removes the most recently added variant.
+    if(delta > 0){
+      openVariantModal(link);
+      return;
+    }
+    const baseName = item.querySelector('.name')?.textContent.trim() || '';
+    const matching = Object.values(cart).filter(x=>x.name.startsWith(baseName + ' - ') && x.qty>0);
+    if(matching.length){
+      const last = matching[matching.length-1];
+      last.qty--;
+      if(last.qty<=0) delete cart[last.name];
+      updateCart();
+    }
+    return;
+  }
+
+  const d = itemData(link);
+  if(!cart[d.name] && delta < 0) return;
+  if(!cart[d.name]) cart[d.name] = {name:d.name, price:d.price, priceText:d.priceText, qty:0};
+  cart[d.name].qty += delta;
+  if(cart[d.name].qty <= 0) delete cart[d.name];
+  updateCart();
+}
+
+function openVariantModal(link){
+  pendingVariantLink = link;
+  const item = link.closest('.item');
+  const title = item.querySelector('.name')?.textContent.trim() || 'Choose option';
+  const variants = JSON.parse(item.dataset.variants || '[]');
+
+  document.getElementById('variantTitle').textContent = title;
+  document.getElementById('variantOptions').innerHTML = variants.map((v,i)=>
+    `<button class="variant-option" type="button" onclick="selectVariant(${i})">${v.label}<span>₹${v.price}</span></button>`
+  ).join('');
+
+  document.getElementById('variantModal').classList.add('open');
+}
+
+function selectVariant(index){
+  if(!pendingVariantLink) return;
+  const item = pendingVariantLink.closest('.item');
+  const variants = JSON.parse(item.dataset.variants || '[]');
+  const selected = variants[index];
+  addItem(pendingVariantLink, selected);
+  closeVariantModal();
+}
+
+function closeVariantModal(){
+  document.getElementById('variantModal').classList.remove('open');
+  pendingVariantLink = null;
+}
+
+function toggleCart(){
+  document.getElementById('cartPanel').classList.toggle('open');
+}
+
+function clearCart(){
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  updateCart();
+}
+
+function sendWhatsAppOrder(){
+  const rows = Object.values(cart);
+  if(!rows.length){ alert('Please add items to your order first.'); return; }
+
+  const total = rows.reduce((a,x)=>a+(x.price*x.qty),0);
+  const gst = total * 0.05;
+  const grandTotal = total + gst;
+
+  let msg = 'Hello Hungry Monk, I would like to order:%0A%0A';
+  rows.forEach(x=>{
+    msg += `${encodeURIComponent(x.name)} × ${x.qty} - ₹${Math.round(x.price*x.qty)}%0A`;
+  });
+  msg += `%0ASubtotal = ₹${Math.round(total)}%0AGST (5%) = ₹${Math.round(gst)}%0AGrand Total = ₹${Math.round(grandTotal)}%0A%0AThank you!`;
+
+  window.open('https://wa.me/916901410360?text=' + msg, '_blank');
+}
+
+document.querySelectorAll('.item .order').forEach(link=>{
+  const controls = document.createElement('div');
+  controls.className = 'qty-controls';
+  controls.innerHTML = `<button class="qty-btn" type="button" aria-label="Decrease quantity">−</button><span class="qty">0</span><button class="qty-btn" type="button" aria-label="Increase quantity">+</button>`;
+  link.parentNode.insertBefore(controls, link);
+
+  link.textContent = 'Add';
+  link.removeAttribute('href');
+  link.removeAttribute('target');
+  link.removeAttribute('rel');
+
+  const minus = controls.querySelectorAll('.qty-btn')[0];
+  const plus = controls.querySelectorAll('.qty-btn')[1];
+  minus.addEventListener('click', ()=>changeQty(link,-1));
+  plus.addEventListener('click', ()=>changeQty(link,1));
+
+  link.addEventListener('click', ()=>{
+    if(link.closest('.item').dataset.variants) openVariantModal(link);
+    else addItem(link);
+  });
+});
+
+function filterItems(){
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  document.querySelectorAll('.section').forEach(sec=>{
+    let visible=0;
+    sec.querySelectorAll('.item').forEach(item=>{
+      const ok=item.textContent.toLowerCase().includes(q);
+      item.style.display=ok?'':'none';
+      if(ok) visible++;
+    });
+    sec.style.display=visible?'block':'none';
+  });
+}
+
+updateCart();
+</script>
+</body></html>
